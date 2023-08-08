@@ -32,10 +32,8 @@
       </tr>
     </thead>
   </table>
-  <table class="table table-bordered">
-    <thead>
 
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h2 class="h3">История рассылок</h2>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
@@ -48,20 +46,30 @@
     </div>
   </div>
 
-
-    {% for item in logs %}
-      <tr>
-        <td class=" align-top col-3">{{ item.last }}</td>
-        {% if item.status %}
-          <td class="table-success align-top text-end">{{ item.status }}</td>
-        {% else %}
-          <td class="table-danger align-top text-end">{{ item.status }}</td>
-        {% endif %}
-        <td class="align-top text-end">{{ item.response }}</td>
-      </tr>
-
-    {% endfor %}
-
-    </thead>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="text-end">Время</th>
+          <th scope="col" class="text-end">Статус</th>
+          <th scope="col" class="text-end">Ответ сервера</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in logs %}
+          <tr>
+            <th class=" align-top col-3 ">{{ item.id }}</th>
+            <td class=" align-top col-3 text-end">{{ item.last }}</td>
+            {% if item.status %}
+              <td class="table-success align-top text-end">Успех</td>
+            {% else %}
+              <td class="table-danger align-top text-end">Ошибка</td>
+            {% endif %}
+            <td class="align-top text-end">{{ item.response }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

@@ -18,24 +18,28 @@
 
   <h2>Журнал рассылок</h2>
   <div class="table-responsive">
-    <table class="table table-striped table-sm">
+    <table class="table table-sm">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Название</th>
-          <th scope="col">Время</th>
-          <th scope="col">Статус</th>
-          <th scope="col">Ответ</th>
+          <th scope="col" class="text-end">Название</th>
+          <th scope="col" class="text-end">Время</th>
+          <th scope="col" class="text-end">Статус</th>
+          <th scope="col" class="text-end">Ответ сервера</th>
         </tr>
       </thead>
       <tbody>
         {% for object in object_list %}
           <tr>
             <td>{{ object.id }}</td>
-            <td>{{ object.name }}</td>
-            <td>{{ object.last }}</td>
-            <td>{{ object.status }}</td>
-            <td>{{ object.response }}</td>
+            <td class="text-end">{{ object.mailing.content.name }}</td>
+            <td class="text-end">{{ object.last }}</td>
+            {% if object.status %}
+              <td class="table-success align-top text-end">Успех</td>
+            {% else %}
+              <td class="table-danger align-top text-end">Ошибка</td>
+            {% endif %}
+            <td class="text-end">{{ object.response }}</td>
           </tr>
         {% endfor %}
       </tbody>
