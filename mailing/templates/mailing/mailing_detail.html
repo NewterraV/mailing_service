@@ -1,8 +1,8 @@
-{% extends 'main/base.html' %}
+{% extends 'mailing/base.html' %}
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ object.name }}</h1>
+    <h1 class="h2">{{ object.content.name }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         <a type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
@@ -16,19 +16,19 @@
     <thead>
       <tr>
         <th class="align-top col-3">Время начала рассылки</th>
-        <td class="align-top text-end">{{object.settings.start_time}}</td>
+        <td class="align-top text-end">{{object.start_time}}</td>
       </tr>
       <tr>
         <th class="align-top">Время окончания рассылки</th>
-        <td class="align-top text-end">{{object.settings.end_time}}</td>
+        <td class="align-top text-end">{{object.end_time}}</td>
       </tr>
       <tr>
         <th class="align-top">Тема письма</th>
-        <td class="align-top">{{object.topic}}</td>
+        <td class="align-top">{{object.content.topic}}</td>
       </tr>
       <tr>
         <th class="align-top">Содержимое письма</th>
-        <td class="align-top">{{object.content}}</td>
+        <td class="align-top">{{object.content.content}}</td>
       </tr>
     </thead>
   </table>

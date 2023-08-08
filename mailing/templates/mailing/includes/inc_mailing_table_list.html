@@ -1,11 +1,11 @@
 <td>{{ object.id }}</td>
-<td>{{ object.name }}</td>
-<td>{{ object.settings.start_time }} - {{ object.settings.end_time }}</td>
-{% if object.settings.state == 'created' %}
+<td>{{ object.content.name }}</td>
+<td>{{ object.start_time }} - {{ object.end_time }}</td>
+{% if object.state == 'created' %}
   <td>Создана</td>
-{% elif object.settings.state == 'completed' %}
+{% elif object.state == 'completed' %}
   <td>Завершена</td>
-{% elif object.settings.state == 'launched' %}
+{% elif object.state == 'launched' %}
   <td>Запущена</td>
 {% endif %}
 <td>

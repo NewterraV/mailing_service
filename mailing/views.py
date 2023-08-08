@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mailing.models import Content, Logs
+from mailing.models import Content, Logs, Mailing
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
@@ -11,12 +11,12 @@ def index(request):
     return render(request, 'mailing/index.html', context)
 
 
-class ContentListView(ListView):
-    model = Content
+class MailingListView(ListView):
+    model = Mailing
 
 
-class ContentDetailView(DetailView):
-    model = Content
+class MailingDetailView(DetailView):
+    model = Mailing
 
 
 class ContentCreateView(CreateView):

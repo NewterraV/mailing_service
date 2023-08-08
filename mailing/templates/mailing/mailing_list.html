@@ -14,8 +14,8 @@
     </div>
   </div>
 
-  <div class="table-responsive pt-3">
-    <table class="table table-striped table-sm">
+  <div class="table pt-3">
+    <table class="table table-sm">
       <thead>
         <tr>
           <th scope="col">id</th>
@@ -27,21 +27,19 @@
       </thead>
       <tbody>
         {% for object in object_list %}
-          <tr>
-            <td>{{ object.id }}</td>
-            <td>{{ object.name }}</td>
-            <td>{{ object.time }}</td>
-            <td>{{ object.state }}</td>
-            <td>
-              <div class="row">
-                <div class="col-12">
-                  <a></a>
-                  <a></a>
-                  <a></a>
-                </div>
-              </div>
-            </td>
-          </tr>
+          {%if object.state == 'created' %}
+            <tr class="table-info">
+              {% include 'mailing/includes/inc_mailing_table_list.html' %}
+            </tr>
+          {%elif object.state == 'completed' %}
+            <tr class="table-success">
+              {% include 'mailing/includes/inc_mailing_table_list.html' %}
+            </tr>
+          {%elif object.state == 'launched' %}
+            <tr class="table-warning">
+              {% include 'mailing/includes/inc_mailing_table_list.html' %}
+            </tr>
+          {% endif %}
         {% endfor %}
       </tbody>
     </table>
