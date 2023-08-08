@@ -18,6 +18,12 @@ class MailingListView(ListView):
 class MailingDetailView(DetailView):
     model = Mailing
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['logs'] = Logs.objects.filter(mailing=self.kwargs['pk'])
+        print(context)
+        return context
+
 
 class ContentCreateView(CreateView):
     model = Content

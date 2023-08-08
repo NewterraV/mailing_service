@@ -27,19 +27,28 @@
       </thead>
       <tbody>
         {% for object in object_list %}
-          {%if object.state == 'created' %}
-            <tr class="table-info">
-              {% include 'mailing/includes/inc_mailing_table_list.html' %}
+            <tr>
+              <td>{{ object.id }}</td>
+              <td>{{ object.content.name }}</td>
+              <td>{{ object.start_time }} - {{ object.end_time }}</td>
+              {% if object.state == 'created' %}
+                <td class="table-info">Создана</td>
+              {% elif object.state == 'completed' %}
+                <td class="table-danger">Завершена</td>
+              {% elif object.state == 'launched' %}
+                <td class="table-success">Запущена</td>
+              {% endif %}
+              <td>
+                <div class="row">
+                  <div class="col">
+                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Подробнее</a>
+                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Редактировать</a>
+                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Приостановить</a>
+                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-danger btn-sm" type="button">Удалить</a>
+                  </div>
+                </div>
+              </td>
             </tr>
-          {%elif object.state == 'completed' %}
-            <tr class="table-success">
-              {% include 'mailing/includes/inc_mailing_table_list.html' %}
-            </tr>
-          {%elif object.state == 'launched' %}
-            <tr class="table-warning">
-              {% include 'mailing/includes/inc_mailing_table_list.html' %}
-            </tr>
-          {% endif %}
         {% endfor %}
       </tbody>
     </table>
