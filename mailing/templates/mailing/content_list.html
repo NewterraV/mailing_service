@@ -1,0 +1,49 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Рассылки</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+        This week
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive pt-3">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Название</th>
+          <th scope="col">Период</th>
+          <th scope="col">Состояние</th>
+          <th scope="col">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in object_list %}
+          <tr>
+            <td>{{ object.id }}</td>
+            <td>{{ object.name }}</td>
+            <td>{{ object.time }}</td>
+            <td>{{ object.state }}</td>
+            <td>
+              <div class="row">
+                <div class="col-12">
+                  <a></a>
+                  <a></a>
+                  <a></a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

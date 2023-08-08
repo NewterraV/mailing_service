@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ object.name }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <a type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        <a type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        <a type="button" class="btn btn-sm btn-outline-secondary">Приостановить</a>
+      </div>
+    </div>
+  </div>
+
+   <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="align-top col-3">Время начала рассылки</th>
+        <td class="align-top text-end">{{object.settings.start_time}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Время окончания рассылки</th>
+        <td class="align-top text-end">{{object.settings.end_time}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Тема письма</th>
+        <td class="align-top">{{object.topic}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Содержимое письма</th>
+        <td class="align-top">{{object.content}}</td>
+      </tr>
+    </thead>
+  </table>
+{% endblock %}
