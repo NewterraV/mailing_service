@@ -20,11 +20,19 @@ class MailingDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['logs'] = Logs.objects.filter(mailing=self.kwargs['pk'])
+        context['logs'] = Logs.objects.filter(mailing=self.kwargs.get('pk'))
         return context
 
 
-class ContentCreateView(CreateView):
+class MailingUpdateView(UpdateView):
+    model = Mailing
+
+
+class MailingDeleteView(DetailView):
+    model = Mailing
+
+
+class MailingCreateView(CreateView):
     model = Content
     fields = ('name', 'topic', 'content', 'last', 'status', 'response')
     success_url = reverse_lazy('mailing:mailing-list')
