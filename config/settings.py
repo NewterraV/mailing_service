@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_mailing',
         'USER': 'postgres',
-        'PASSWORD': 'XsXs0195'
+        'PASSWORD': ''
     }
 }
 
