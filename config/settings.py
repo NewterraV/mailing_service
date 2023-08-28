@@ -28,7 +28,7 @@ load_dotenv(dotenv_path=dot_env)
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 1
+DEBUG = os.getenv('DEBUG') == '1'
 
 ALLOWED_HOSTS = []
 
@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'crispy_forms',
+    'crispy_bootstrap5',
+
     'mailing',
 ]
 
@@ -145,10 +149,14 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True
 
 # Настройки кэша
-CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 1
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == '1'
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv('CACHES_LOCATION'),
     }
 }
+# Settings crispy-forms for bootstrap
+# https://django-crispy-forms.readthedocs.io/en/latest/
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

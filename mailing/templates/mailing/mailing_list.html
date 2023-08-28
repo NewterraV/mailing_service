@@ -1,5 +1,4 @@
 {% extends 'mailing/base.html' %}
-
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Рассылки</h1>
@@ -29,8 +28,8 @@
         {% for object in object_list %}
             <tr>
               <td>{{ object.id }}</td>
-              <td>{{ object.content.name }}</td>
-              <td>{{ object.start_time }} - {{ object.end_time }}</td>
+              <td>{{ object.content.first.name}}</td>
+              <td>C {{ object.start_date }} {{ object.start_time }} по {{ object.end_date }} {{ object.end_time }}</td>
               {% if object.state == 'created' %}
                 <td class="table-info">Создана</td>
               {% elif object.state == 'completed' %}
