@@ -5,9 +5,8 @@
     <h1 class="h2">{{ content.name }}</h1>
     <h1 class="h2">{{ title }}</h1>    <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <a type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-        <a type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
-        <a type="button" class="btn btn-sm btn-outline-secondary">Приостановить</a>
+        <a href="{% url 'mailing:update_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        <a href="{% url 'mailing:delete_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
       </div>
     </div>
   </div>

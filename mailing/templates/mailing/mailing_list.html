@@ -29,21 +29,30 @@
             <tr>
               <td>{{ object.id }}</td>
               <td>{{ object.content.first.name}}</td>
-              <td>C {{ object.start_date }} {{ object.start_time }} по {{ object.end_date }} {{ object.end_time }}</td>
+              <td><p>C {{ object.start_date }} {{ object.start_time }}</p>
+                <p>по {{ object.end_date }} {{ object.end_time }}</p></td>
               {% if object.state == 'created' %}
                 <td class="table-info">Создана</td>
               {% elif object.state == 'completed' %}
                 <td class="table-danger">Завершена</td>
               {% elif object.state == 'launched' %}
                 <td class="table-success">Запущена</td>
+              {% elif object.state == 'stopped' %}
+                <td class="table-warning">Остановлена</td>
               {% endif %}
               <td>
                 <div class="row">
                   <div class="col">
                     <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Подробнее</a>
-                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Редактировать</a>
-                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Приостановить</a>
-                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-danger btn-sm" type="button">Удалить</a>
+                    <a href="{% url 'mailing:update_mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Редактировать</a>
+                    {% if object.state in 'created,launched' %}
+                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Приостановить</a>
+                    {% elif object.state == 'stopped' %}
+                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Запустить</a>
+                    {% else %}
+                      <a  class="btn btn-warning btn-sm disabled" type="button" >Приостановить</a>
+                    {% endif %}
+                    <a href="{% url 'mailing:delete_mailing' object.pk %}" class="btn btn-danger btn-sm" type="button">Удалить</a>
                   </div>
                 </div>
               </td>
