@@ -1,0 +1,1 @@
+[{"model": "client.client", "pk": 7, "fields": {"first_name": "Владислав", "surname": null, "last_name": "Порошин", "email": "Tsis.v50@gmail.com", "comment": "укпвк"}}, {"model": "client.client", "pk": 8, "fields": {"first_name": "Василий", "surname": "Петров", "last_name": "Порошин", "email": "godville50@gmail.com", "comment": ""}}]

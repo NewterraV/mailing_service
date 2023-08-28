@@ -60,12 +60,16 @@
               </h6>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'mailing:index' %}">
+              <span data-feather="layers"></span>
+               Главная
+            </a>
             <a class="nav-link" href="{% url 'mailing:mailing_list' %}">
               <span data-feather="layers"></span>
                Рассылки
             </a>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'client:list' %}">
               <span data-feather="layers"></span>
               Клиенты
             </a>
@@ -90,6 +94,10 @@
             <a class="nav-link" href="{% url 'mailing:create_mailing' %}">
               <span data-feather="file-text"></span>
               Новая рассылка
+            </a>
+            <a class="nav-link" href="{% url 'client:create' %}">
+              <span data-feather="file-text"></span>
+              Новый клиент
             </a>
           </li>
         </ul>

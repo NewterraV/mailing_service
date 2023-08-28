@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
 
     'mailing',
+    'client'
 ]
 
 MIDDLEWARE = [
