@@ -32,7 +32,7 @@
         {% for object in object_list %}
           <tr>
             <td>{{ object.id }}</td>
-            <td class="text-end">{{ object.mailing.content.name }}</td>
+            <td class="text-end">{{ object.mailing.name}}</td>
             <td class="text-end">{{ object.last }}</td>
             {% if object.status %}
               <td class="table-success align-top text-end">Успех</td>

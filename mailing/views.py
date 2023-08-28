@@ -48,7 +48,7 @@ class MailingListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
-        queryset = queryset.order_by('pk')
+        queryset = queryset.order_by('name')
         return queryset
 
 

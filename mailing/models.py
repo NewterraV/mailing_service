@@ -22,15 +22,15 @@ class Mailing(models.Model):
     Модель описывающая настройки рассылки
     """
 
+    name = models.CharField(max_length=50, verbose_name='Краткое название рассылки')
     start_date = models.DateField(default=now, verbose_name='Дата начала рассылки')
-    start_time = models.TimeField(default=now, verbose_name='Время начала рассылки')
+    time = models.TimeField(default=now, verbose_name='Время отправки письма')
     end_date = models.DateField(verbose_name='Дата окончания рассылки')
-    end_time = models.TimeField(verbose_name='Время окончания рассылки')
     period = models.CharField(max_length=5, choices=PERIOD, verbose_name='Периодичность рассылки')  # day, week, month
     state = models.CharField(max_length=10, choices=STATE, default='created', verbose_name='Статус рассылки')  # completed, created, launched
 
     def __str__(self):
-        return f'{self.start_time} - {self.end_time}:{self.state}'
+        return f'{self.name}: {self.state}'
 
     def get_content(self):
         pass
@@ -45,7 +45,6 @@ class Content(models.Model):
     Модель описывающая содержание рассылки
     """
 
-    name = models.CharField(max_length=50, verbose_name='Краткое название рассылки')
     topic = models.CharField(max_length=200, verbose_name='Тема письма')
     content = models.TextField(verbose_name='Содержание письма')
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='Настройки', related_name='content')

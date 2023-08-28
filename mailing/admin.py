@@ -4,13 +4,13 @@ from mailing.models import Mailing, Content, Logs
 
 @admin.register(Mailing)
 class MailingAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'start_time', 'end_time', 'period', 'state')
+    list_display = ('pk', 'name', 'start_date', 'end_date', 'time', 'period', 'state')
     list_filter = ('state',)
 
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'topic',)
+    list_display = ('topic',)
     search_fields = ('name', 'topic',)
 
 
