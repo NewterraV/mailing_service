@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
 
+    'users',
+
     'mailing',
-    'client'
+    'client',
 ]
 
 MIDDLEWARE = [
@@ -92,6 +94,12 @@ DATABASES = {
     }
 }
 
+# Переопределение модели аутентификации
+AUTH_USER_MODEL = 'users.User'
+
+
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
