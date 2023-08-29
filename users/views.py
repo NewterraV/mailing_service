@@ -47,7 +47,6 @@ class RegisterView(CreateView):
         # Создаем ключ верификации пользователя и отправляем его на почту
         verify = VerifyCode.objects.create(verify_code=generate_code(), user=self.object)
         verify.save()
-        print(verify.verify_code)
         send_verification_mail(self.object, verify.verify_code)
         # Редирект на страницу верификации
         return redirect(reverse('users:verify', args=[self.object.pk]))

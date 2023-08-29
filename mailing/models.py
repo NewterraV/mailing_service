@@ -26,8 +26,10 @@ class Mailing(models.Model):
     start_date = models.DateField(default=now, verbose_name='Дата начала рассылки')
     time = models.TimeField(default=now, verbose_name='Время отправки письма')
     end_date = models.DateField(verbose_name='Дата окончания рассылки')
+    last_time = models.DateField(default=start_date, verbose_name='дата последней отправки')
     period = models.CharField(max_length=5, choices=PERIOD, verbose_name='Периодичность рассылки')  # day, week, month
     state = models.CharField(max_length=10, choices=STATE, default='created', verbose_name='Статус рассылки')  # completed, created, launched
+    clients = models.ManyToManyField('client.Client', verbose_name='клиенты рассылки')
 
     def __str__(self):
         return f'{self.name}: {self.state}'

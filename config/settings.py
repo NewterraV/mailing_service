@@ -174,5 +174,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Crontab-задачи
 # https://pypi.org/project/django-crontab/
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.services.set_state_stopped', ['1'])
+    ('0 0 */1 * *', 'mailing.services.set_state_mailing'),
+    ('*/1 * * * *', 'mailing.services.send_mailings',)
 ]

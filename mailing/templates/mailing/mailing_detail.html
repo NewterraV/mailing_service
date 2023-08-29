@@ -14,12 +14,16 @@
    <table class="table table-bordered">
     <thead>
       <tr>
-        <th class="align-top col-3">Время начала рассылки</th>
-        <td class="align-top text-end">{{ object.start_date }} - {{object.start_time}}</td>
+        <th class="align-top col-3">Период рассылки рассылки</th>
+        <td class="align-top text-end">{{ object.start_date }} - {{ object.end_date }}</td>
       </tr>
       <tr>
-        <th class="align-top">Время окончания рассылки</th>
-        <td class="align-top text-end">{{ object.end_date }} - {{object.end_time}}</td>
+        <th class="align-top">Время отправки письма</th>
+        <td class="align-top text-end">{{ object.time }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Период отправки</th>
+        <td class="align-top text-end">раз в {{ object.get_period_display}}</td>
       </tr>
       <tr>
         <th class="align-top">Тема письма</th>
@@ -28,6 +32,14 @@
       <tr>
         <th class="align-top">Содержимое письма</th>
         <td class="align-top">{{content.content}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Клиенты рассылки</th>
+        <td class="align-top">
+          {% for client in clients %}
+            {{ client.email }};
+          {% endfor %}
+        </td>
       </tr>
     </thead>
   </table>

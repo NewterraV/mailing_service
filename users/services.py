@@ -11,8 +11,6 @@ def generate_code():
 def send_verification_mail(user, code):
     """Метод отправляет на email нового пользователя код для активации аккаунта"""
 
-    print(code)
-
     send_mail(
         'Подтвердите ваш Email',
         f'Код верификации {code} \n Ссылка для ввода кода верификации: '

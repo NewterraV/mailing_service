@@ -6,6 +6,7 @@ from mailing.forms import MailingForm, ContentForm
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
 from mailing.services import set_state_stopped
+from client.models import Client
 
 
 class MailingFormsetMixin:
@@ -67,9 +68,9 @@ class MailingDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs.get('pk'))
         context['logs'] = Logs.objects.filter(mailing=self.kwargs.get('pk'))
         context['content'] = Content.objects.filter(mailing=self.kwargs.get('pk')).first()
+        context['clients'] = self.object.clients.all()
         # print(context.content.content)
         # context['title'] = f'Рассылка - {self.object.content_set.name[:20]}'
         return context
