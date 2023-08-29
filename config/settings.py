@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_crontab',
 
     'users',
 
@@ -169,3 +170,9 @@ CACHES = {
 # https://django-crispy-forms.readthedocs.io/en/latest/
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Crontab-задачи
+# https://pypi.org/project/django-crontab/
+CRONJOBS = [
+    ('*/1 * * * *', 'mailing.services.set_state_stopped', ['1'])
+]

@@ -13,3 +13,5 @@ def set_state_stopped(pk):
     elif mailing.state == 'stopped':
         mailing.state = 'created'
         mailing.save()
+
+
