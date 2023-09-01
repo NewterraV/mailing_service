@@ -7,6 +7,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import redirect
 from mailing.services import set_state_stopped, set_state_mailing, send_and_log
 from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class MailingFormsetMixin:
@@ -49,25 +50,50 @@ def index(request):
 
 class LogsListView(ListView):
     model = Logs
+    extra_context = {
+        'title': 'История рассылок'
+    }
+    login_url = 'users:login'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        if self.request.user.is_staff:
+            context_data['object_list'] = self.model.objects.all().order_by('-pk')
+        else:
+            context_data['object_list'] = self.model.objects.filter(mailing__owner=self.request.user).order_by('-pk')
+        return context_data
+
+    # def get_queryset(self, *args, **kwargs):
+    #     if self.request.user.is_staff:
+    #         queryset = super().get_queryset().all().order_by('-pk')
+    #     else:
+    #         queryset = super().get_queryset().filter(mailing_owner=self.request.user).order_by('first_name')
+    #     return queryset
 
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     extra_context = {
         'title': 'Рассылки'
     }
+    login_url = 'users:login'
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset().filter(owner=self.request.user).order_by('name')
+        if self.request.user.is_staff:
+            queryset = super().get_queryset().all().order_by('name')
+        else:
+            queryset = super().get_queryset().filter(owner=self.request.user).order_by('name')
         return queryset
 
 
-class MailingDetailView(DetailView):
+class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
+    login_url = 'users:login'
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user:
+        if self.object.owner != self.request.user and not self.request.user.is_staff:
             raise Http404
         return self.object
 
@@ -81,18 +107,30 @@ class MailingDetailView(DetailView):
         return context
 
 
-class MailingUpdateView(MailingFormsetMixin, UpdateView):
+class MailingUpdateView(LoginRequiredMixin, MailingFormsetMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     extra_context = {
         'title': 'Редактирование рассылки'
     }
-    extra = 0   # переменная для ограничения форм сета
+    login_url = 'users:login'
+    extra = 0  # переменная для ограничения форм сета
+
+
+    def get_form_kwargs(self):
+        """Метод передает авторизованного пользователя в kwargs"""
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
+
         context_data = self.get_context_data()
+        self.object = form.save()
         formset = context_data['formset']
+
         if formset.is_valid():
+            self.object = form.save()
             if self.object.next_date < self.object.start_date:
                 self.object.next_date = self.object.start_date
             set_state_mailing(self.object)
@@ -104,15 +142,17 @@ class MailingUpdateView(MailingFormsetMixin, UpdateView):
         return reverse('mailing:mailing', args=[self.kwargs.get('pk')])
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     extra_context = {
         'title': 'Удаление рассылки'
     }
+    login_url = 'users:login'
     success_url = reverse_lazy('mailing:mailing_list')
 
 
-class MailingCreateView(MailingFormsetMixin, CreateView):
+class MailingCreateView(LoginRequiredMixin, MailingFormsetMixin, CreateView):
+    login_url = 'users:login'
     model = Mailing
     extra_context = {
         'title': 'Новая рассылка'
@@ -120,21 +160,12 @@ class MailingCreateView(MailingFormsetMixin, CreateView):
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
 
-    def get_form(self, **kwargs):
+    def get_form_kwargs(self, **kwargs):
         """Метод передает авторизованного пользователя в kwargs"""
-        return self.form_class(user=self.request.user)
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
-    def get_context_data(self, *args, **kwargs):
-
-        context_data = super().get_context_data(**kwargs)
-        content_formset = inlineformset_factory(Mailing, Content, form=ContentForm, extra=1)
-        if self.request.method == 'POST':
-            formset = content_formset(self.request.POST, instance=self.object)
-        else:
-            formset = content_formset(instance=self.object)
-
-        context_data['formset'] = formset
-        return context_data
     
     def form_valid(self, form):
 

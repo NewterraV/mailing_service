@@ -1,5 +1,5 @@
 from django import forms
-from mailing.models import Mailing, Content
+from mailing.models import Mailing, Content, PERIOD
 from crispy_forms.helper import FormHelper
 from datetime import datetime
 from client.models import Client
@@ -22,13 +22,16 @@ class MailingForm(StyleMixin, forms.ModelForm):
 
     class Meta:
         model = Mailing
-        exclude = 'state', 'next_date', 'send_today', 'owner'
+        exclude = 'state', 'send_today', 'owner'
 
     def __init__(self, *args, **kwargs):
         """Переопределение для фильтрации содержимого поля clients"""
-        self.user = kwargs.pop('user', None)
+
+        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+
         self.fields['clients'].queryset = Client.objects.filter(owner=self.user)
+
 
     def clean_start_date(self):
         """Метод проверяет, что введенная дата больше или равна текущей"""
@@ -42,7 +45,8 @@ class MailingForm(StyleMixin, forms.ModelForm):
     def clean_end_date(self):
         """Метод проверяет, что введенная дата больше или равна текущей"""
         cleaned_data = self.cleaned_data.get('end_date')
-        if cleaned_data < self.cleaned_data.get('start_date'):
+        start_date = self.cleaned_data.get('start_date')
+        if cleaned_data < start_date:
             raise forms.ValidationError('Дата завершения рассылки не может быть ранее даты начала рассылки.')
 
         return cleaned_data
