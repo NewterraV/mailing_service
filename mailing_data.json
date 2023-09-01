@@ -5,11 +5,16 @@
     "fields": {
       "name": "\"GamesVoice опубликовала трейлер\"",
       "start_date": "2023-08-28",
-      "time": "20:20:05",
+      "time": "10:30:00",
       "end_date": "2027-08-28",
-      "last_time": "2023-08-28",
-      "period": "day",
-      "state": "stopped"
+      "next_date": "2023-09-29",
+      "period": "month",
+      "state": "launched",
+      "send_today": false,
+      "clients": [
+        8
+      ],
+      "owner": 1
     }
   },
   {
@@ -18,11 +23,16 @@
     "fields": {
       "name": "Альтернатива ChatGPT",
       "start_date": "2023-08-28",
-      "time": "20:21:57",
-      "end_date": "2025-10-29",
-      "last_time": "2023-08-28",
-      "period": "week",
-      "state": "created"
+      "time": "10:30:00",
+      "end_date": "2023-09-01",
+      "next_date": "2023-09-02",
+      "period": "day",
+      "state": "completed",
+      "send_today": false,
+      "clients": [
+        8
+      ],
+      "owner": 1
     }
   },
   {
@@ -30,12 +40,17 @@
     "pk": 3,
     "fields": {
       "name": "Флагман сентябрьской подборки",
-      "start_date": "2023-08-28",
-      "time": "12:00:47",
-      "end_date": "2027-08-28",
-      "last_time": "2023-08-28",
-      "period": "month",
-      "state": "launched"
+      "start_date": "2023-08-20",
+      "time": "17:00:00",
+      "end_date": "2027-08-29",
+      "next_date": "2023-08-30",
+      "period": "day",
+      "state": "launched",
+      "send_today": false,
+      "clients": [
+        7
+      ],
+      "owner": 1
     }
   },
   {
@@ -43,12 +58,17 @@
     "pk": 4,
     "fields": {
       "name": "Проводник» Windows обновился",
-      "start_date": "2023-08-28",
-      "time": "20:24:11",
-      "end_date": "2026-08-28",
-      "last_time": "2023-08-28",
-      "period": "week",
-      "state": "stopped"
+      "start_date": "2023-09-03",
+      "time": "10:30:00",
+      "end_date": "2023-09-15",
+      "next_date": "2023-09-03",
+      "period": "month",
+      "state": "created",
+      "send_today": null,
+      "clients": [
+        7
+      ],
+      "owner": 1
     }
   },
   {
@@ -57,11 +77,16 @@
     "fields": {
       "name": "Realme GT5 раскупили за 2 часа",
       "start_date": "2023-08-28",
-      "time": "20:25:10",
-      "end_date": "2023-08-28",
-      "last_time": "2023-08-28",
-      "period": "month",
-      "state": "completed"
+      "time": "10:30:00",
+      "end_date": "2023-09-09",
+      "next_date": "2023-09-02",
+      "period": "day",
+      "state": "launched",
+      "send_today": false,
+      "clients": [
+        7
+      ],
+      "owner": 1
     }
   },
   {
@@ -111,62 +136,42 @@
   },
   {
     "model": "mailing.logs",
-    "pk": 1,
+    "pk": 15,
     "fields": {
-      "mailing": 3,
-      "last": "2023-08-28T20:30:21.462Z",
-      "status": true,
-      "response": "200"
-    }
-  },
-  {
-    "model": "mailing.logs",
-    "pk": 2,
-    "fields": {
-      "mailing": 3,
-      "last": "2023-08-28T20:30:29.350Z",
-      "status": true,
-      "response": "202"
-    }
-  },
-  {
-    "model": "mailing.logs",
-    "pk": 3,
-    "fields": {
-      "mailing": 3,
-      "last": "2023-08-28T20:30:37.262Z",
+      "mailing": 5,
+      "last": "2023-09-01T11:43:02.734Z",
       "status": false,
-      "response": "500"
+      "response": "SMTP-сервер отказался принять данные сообщения."
     }
   },
   {
     "model": "mailing.logs",
-    "pk": 4,
+    "pk": 16,
     "fields": {
       "mailing": 2,
-      "last": "2023-08-28T20:30:44.287Z",
+      "last": "2023-09-01T11:43:03.754Z",
       "status": true,
-      "response": "200"
+      "response": "Рассылка выполнена"
     }
   },
   {
     "model": "mailing.logs",
-    "pk": 5,
+    "pk": 17,
     "fields": {
-      "mailing": 1,
-      "last": "2023-08-28T20:32:12.317Z",
-      "status": false,
-      "response": "500"
+      "mailing": 2,
+      "last": "2023-09-01T11:44:50.634Z",
+      "status": true,
+      "response": "Рассылка выполнена"
     }
   },
   {
     "model": "mailing.logs",
-    "pk": 6,
+    "pk": 18,
     "fields": {
-      "mailing": 4,
-      "last": "2023-08-28T20:32:18.714Z",
-      "status": false,
-      "response": "500"
+      "mailing": 5,
+      "last": "2023-09-01T11:45:39.690Z",
+      "status": true,
+      "response": "Рассылка выполнена"
     }
   }
 ]

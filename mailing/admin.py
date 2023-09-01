@@ -4,7 +4,7 @@ from mailing.models import Mailing, Content, Logs
 
 @admin.register(Mailing)
 class MailingAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'start_date', 'end_date', 'time', 'period', 'state')
+    list_display = ('pk', 'name', 'send_today', 'start_date', 'end_date', 'period', 'state')
     list_filter = ('state',)
 
 

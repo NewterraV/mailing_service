@@ -1,19 +1,20 @@
 from django.db import models
 from django.utils.timezone import now
+from django.conf import settings
 
 NULLABLE = {'blank': True, 'null': True}
 
 # Константы для Mailing
 PERIOD = (
-    ('day', 'День'),
-    ('week', 'Месяц'),
-    ('month', 'Год')
+    ('day', 'день'),
+    ('week', 'неделя'),
+    ('month', 'месяц')
 )
 STATE = (
-    ('completed', 'Завершена'),
-    ('created', 'Создана'),
-    ('launched', 'Запущена'),
-    ('stopped', 'Остановлена'),
+    ('completed', 'завершена'),
+    ('created', 'создана'),
+    ('launched', 'запущена'),
+    ('stopped', 'остановлена'),
 )
 
 
@@ -26,16 +27,15 @@ class Mailing(models.Model):
     start_date = models.DateField(default=now, verbose_name='Дата начала рассылки')
     time = models.TimeField(default=now, verbose_name='Время отправки письма')
     end_date = models.DateField(verbose_name='Дата окончания рассылки')
-    last_time = models.DateField(default=start_date, verbose_name='дата последней отправки')
+    next_date = models.DateField(**NULLABLE, verbose_name='дата следующей отправки')
     period = models.CharField(max_length=5, choices=PERIOD, verbose_name='Периодичность рассылки')  # day, week, month
     state = models.CharField(max_length=10, choices=STATE, default='created', verbose_name='Статус рассылки')  # completed, created, launched
     clients = models.ManyToManyField('client.Client', verbose_name='клиенты рассылки')
+    send_today = models.BooleanField(default=False, **NULLABLE, verbose_name='отправка сегодня')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.name}: {self.state}'
-
-    def get_content(self):
-        pass
 
     class Meta:
         verbose_name = 'рассылка'

@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView, C
 from client.forms import ClientForm
 from client.models import Client
 from django.urls import reverse_lazy, reverse
+from django.http import Http404
 
 
 class ClientListView(ListView):
@@ -11,12 +12,22 @@ class ClientListView(ListView):
         'title': 'Клиенты'
     }
 
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset().filter(owner=self.request.user).order_by('last_name')
+        return queryset
+
 
 class ClientDetailView(DetailView):
     model = Client
     extra_context = {
         'title': 'Клиент'
     }
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user:
+            raise Http404
+        return self.objec
 
 
 class ClientCreateView(CreateView):

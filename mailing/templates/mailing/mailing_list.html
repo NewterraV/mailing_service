@@ -22,6 +22,8 @@
           <th scope="col">Период</th>
           <th scope="col">Состояние</th>
           <th scope="col">Действия</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +31,8 @@
             <tr>
               <td>{{ object.id }}</td>
               <td>{{ object.name}}</td>
-              <td>C {{ object.start_date }} по {{ object.end_date }}</td>
+              <td class="row">C {{ object.start_date }}</td>
+              <td class="row"> по {{ object.end_date }}</td>
               {% if object.state == 'created' %}
                 <td class="table-info">Создана</td>
               {% elif object.state == 'completed' %}
@@ -42,18 +45,22 @@
               <td>
                 <div class="row">
                   <div class="col">
-                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Подробнее</a>
-                    <a href="{% url 'mailing:update_mailing' object.pk %}" class="btn btn-outline-primary btn-sm" type="button">Редактировать</a>
-                    {% if object.state in 'created,launched' %}
-                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Приостановить</a>
-                    {% elif object.state == 'stopped' %}
-                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-warning btn-sm" type="button">Запустить</a>
-                    {% else %}
-                      <a  class="btn btn-warning btn-sm disabled" type="button" >Приостановить</a>
-                    {% endif %}
-                    <a href="{% url 'mailing:delete_mailing' object.pk %}" class="btn btn-danger btn-sm" type="button">Удалить</a>
+                    <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Подробнее</a>
+                    <a href="{% url 'mailing:update_mailing' object.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Редактировать</a>
                   </div>
                 </div>
+              </td>
+              <td>
+                {% if object.state in 'created,launched' %}
+                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm" type="button">Приостановить</a>
+                    {% elif object.state == 'stopped' %}
+                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm" type="button">Запустить</a>
+                    {% else %}
+                      <a  class="btn btn-secondary btn-sm disabled" type="button" >Приостановить</a>
+                    {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'mailing:delete_mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Удалить</a>
               </td>
             </tr>
         {% endfor %}

@@ -2,10 +2,10 @@
 
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ content.name }}</h1>
-    <h1 class="h2">{{ title }}</h1>    <div class="btn-toolbar mb-2 mb-md-0">
+    <h1 class="h2">{{ object.name }}</h1>    <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         <a href="{% url 'mailing:update_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        <a href="{% url 'mailing:send_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Отправить сейчас</a>
         <a href="{% url 'mailing:delete_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
       </div>
     </div>
@@ -14,7 +14,7 @@
    <table class="table table-bordered">
     <thead>
       <tr>
-        <th class="align-top col-3">Период рассылки рассылки</th>
+        <th class="align-top col-3">Период действия рассылки</th>
         <td class="align-top text-end">{{ object.start_date }} - {{ object.end_date }}</td>
       </tr>
       <tr>
@@ -23,7 +23,11 @@
       </tr>
       <tr>
         <th class="align-top">Период отправки</th>
-        <td class="align-top text-end">раз в {{ object.get_period_display}}</td>
+        <td class="align-top text-end">{{ object.get_period_display|title}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Дата следующей отправки</th>
+        <td class="align-top text-end">{{ object.next_date}}</td>
       </tr>
       <tr>
         <th class="align-top">Тема письма</th>
@@ -34,7 +38,7 @@
         <td class="align-top">{{content.content}}</td>
       </tr>
       <tr>
-        <th class="align-top">Клиенты рассылки</th>
+        <th class="align-top">Получатели рассылки</th>
         <td class="align-top">
           {% for client in clients %}
             {{ client.email }};

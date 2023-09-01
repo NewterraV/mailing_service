@@ -6,12 +6,12 @@ class Command(BaseCommand):
     """Команда для создания администратора"""
 
     def handle(self, *args, **options):
-        email = input('Введите email')
+        email = input('Введите email: ')
         user = User.objects.create(email=email, is_superuser=True, is_staff=True, )
 
         while True:
-            password = input('Введите пароль')
-            password_2 = input('Повторите пароль')
+            password = input('Введите пароль: ')
+            password_2 = input('Повторите пароль: ')
 
             if password == password_2:
                 user.set_password(password)
