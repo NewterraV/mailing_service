@@ -22,7 +22,7 @@ class MailingForm(StyleMixin, forms.ModelForm):
 
     class Meta:
         model = Mailing
-        exclude = 'state', 'send_today', 'owner'
+        exclude = 'state', 'send_today', 'owner', 'next_date'
 
     def __init__(self, *args, **kwargs):
         """Переопределение для фильтрации содержимого поля clients"""

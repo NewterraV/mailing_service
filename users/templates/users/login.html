@@ -19,8 +19,8 @@
                         <div class="card-body">
                             {% csrf_token %}
                             {{ form|crispy }}
-                            <button class="btn btn-primary" type="submit">Войти</button>
-                            <a class="btn btn-outline-danger" href="{% url 'users:register' %}">Зарегистрироваться</a>
+                            <button class="btn btn-secondary" type="submit">Войти</button>
+                            <a class="btn btn-outline-secondary" href="{% url 'users:register' %}">Зарегистрироваться</a>
                             <a href="{% url 'users:reset_password' %}" class="btn btn-link" type="button">Забыли пароль?</a>
                         </div>
                     </div>

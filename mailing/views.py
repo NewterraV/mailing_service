@@ -7,7 +7,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import redirect
 from mailing.services import set_state_stopped, set_state_mailing, send_and_log
 from django.http import Http404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class MailingFormsetMixin:
@@ -55,23 +55,15 @@ class LogsListView(ListView):
     }
     login_url = 'users:login'
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
+    def get_queryset(self, *args, **kwargs):
         if self.request.user.is_staff:
-            context_data['object_list'] = self.model.objects.all().order_by('-pk')
+            queryset = super().get_queryset().all().order_by('-pk')
         else:
-            context_data['object_list'] = self.model.objects.filter(mailing__owner=self.request.user).order_by('-pk')
-        return context_data
-
-    # def get_queryset(self, *args, **kwargs):
-    #     if self.request.user.is_staff:
-    #         queryset = super().get_queryset().all().order_by('-pk')
-    #     else:
-    #         queryset = super().get_queryset().filter(mailing_owner=self.request.user).order_by('first_name')
-    #     return queryset
+            queryset = super().get_queryset().filter(mailing__owner=self.request.user).order_by('-pk')
+        return queryset
 
 
-class MailingListView(LoginRequiredMixin, ListView):
+class MailingListView(LoginRequiredMixin,  ListView):
     model = Mailing
     extra_context = {
         'title': 'Рассылки'
@@ -107,13 +99,15 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MailingUpdateView(LoginRequiredMixin, MailingFormsetMixin, UpdateView):
+class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingFormsetMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     extra_context = {
         'title': 'Редактирование рассылки'
     }
+
     login_url = 'users:login'
+    permission_required = 'mailing.change_mailing'
     extra = 0  # переменная для ограничения форм сета
 
 
@@ -142,22 +136,24 @@ class MailingUpdateView(LoginRequiredMixin, MailingFormsetMixin, UpdateView):
         return reverse('mailing:mailing', args=[self.kwargs.get('pk')])
 
 
-class MailingDeleteView(LoginRequiredMixin, DeleteView):
+class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mailing
     extra_context = {
         'title': 'Удаление рассылки'
     }
     login_url = 'users:login'
+    permission_required = 'mailing.delete_mailing'
     success_url = reverse_lazy('mailing:mailing_list')
 
 
-class MailingCreateView(LoginRequiredMixin, MailingFormsetMixin, CreateView):
+class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, MailingFormsetMixin, CreateView):
     login_url = 'users:login'
     model = Mailing
     extra_context = {
         'title': 'Новая рассылка'
     }
     form_class = MailingForm
+    permission_required = 'mailing.add_mailing'
     success_url = reverse_lazy('mailing:mailing_list')
 
     def get_form_kwargs(self, **kwargs):
