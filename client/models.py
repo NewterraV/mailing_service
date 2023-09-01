@@ -8,7 +8,7 @@ class Client(models.Model):
     first_name = models.CharField(max_length=50, verbose_name='имя')
     surname = models.CharField(max_length=50, verbose_name='отчество', **NULLABLE)
     last_name = models.CharField(max_length=50, verbose_name='фамилия')
-    email = models.EmailField(unique=True, verbose_name='еmail')
+    email = models.EmailField(verbose_name='еmail')
     comment = models.TextField(**NULLABLE, verbose_name='комментарий')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='владелец')
 
