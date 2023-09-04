@@ -102,6 +102,7 @@ $ poetry install
 
 Обновить crontub задачи:
 ```sh
+$ python manage.py loaddata auth.json
 $ python manage.py crontab add
 ```
 
