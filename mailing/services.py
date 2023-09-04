@@ -7,6 +7,50 @@ from smtplib import (SMTPServerDisconnected, SMTPSenderRefused,
                      SMTPRecipientsRefused, SMTPDataError, SMTPConnectError, SMTPHeloError, SMTPNotSupportedError,
                      SMTPAuthenticationError)
 from typing import Any
+from users.models import User
+from client.models import Client
+from blog.models import Blog
+from random import sample
+
+
+def get_index_context(request):
+    """Метод собирает контекст необходимый для домашней страницы"""
+
+    if request.user.is_anonymous:
+        logs = None
+        mailing_count = None
+        mailing_active = None
+        mailing_launched = None
+        clients = None
+        users = None
+
+    elif request.user.is_staff:
+        logs = Logs.objects.all().order_by('-pk')
+        mailing_count = Mailing.objects.all().count()
+        mailing_active = Mailing.objects.filter(is_active=True).count()
+        mailing_launched = Mailing.objects.filter(is_active=True, state='launched').count()
+        clients = Client.objects.all().distinct('email').count()
+        users = User.objects.all().count()
+
+    else:
+        logs = Logs.objects.filter(mailing__owner=request.user).order_by('-pk')
+        mailing_count = Mailing.objects.filter(owner=request.user).count()
+        mailing_active = Mailing.objects.filter(owner=request.user, is_active=True).count()
+        mailing_launched = Mailing.objects.filter(owner=request.user, is_active=True, state='launched').count()
+        clients = Client.objects.filter(owner=request.user).distinct('email').count()
+        users = None
+
+    context = {
+        'logs': logs[:10] if logs else None,
+        'logs_count': len(logs) if logs else None,
+        'mailing_count': mailing_count,
+        'mailing_active': mailing_active,
+        'mailing_launched': mailing_launched,
+        'clients': clients,
+        'users': users,
+        'title': 'Главная страница'
+    }
+    return context
 
 
 def set_state_stopped(pk: str,) -> None:

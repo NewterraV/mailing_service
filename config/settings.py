@@ -165,6 +165,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv('CACHES_LOCATION'),
+        'TIMEOUT': 120
     }
 }
 # Settings crispy-forms for bootstrap
