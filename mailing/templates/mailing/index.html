@@ -4,11 +4,13 @@
   {% if user.is_authenticated%}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Статистика</h1>
+      <p class="blog-post-meta text-end text-muted p-0">Обновление каждые 2 минуты</p>
     </div>
     <div class="row">
       <div class="col-8">
         <div class="table-responsive">
           <table class="table table-sm">
+            <caption>Последние 10 событий</caption>
             <thead>
               <tr>
                 <th scope="col">#</th>

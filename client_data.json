@@ -1,1 +1,26 @@
-[{"model": "client.client", "pk": 7, "fields": {"first_name": "Владислав", "surname": "Александрович", "last_name": "Порошин", "email": "Tsis.v50@gmail.com", "comment": "ger", "owner": 3}}, {"model": "client.client", "pk": 8, "fields": {"first_name": "Василий", "surname": "Петров", "last_name": "Порошин", "email": "godville50@gmail.com", "comment": "", "owner": 4}}]
+[
+  {
+    "model": "client.client",
+    "pk": 7,
+    "fields": {
+      "first_name": "Пётр",
+      "surname": "Петрович",
+      "last_name": "Петров",
+      "email": "test@test.com",
+      "comment": "тест1",
+      "owner": 3
+    }
+  },
+  {
+    "model": "client.client",
+    "pk": 8,
+    "fields": {
+      "first_name": "Василий",
+      "surname": "Васильевич",
+      "last_name": "Васильев",
+      "email": "test250@test.com",
+      "comment": "",
+      "owner": 4
+    }
+  }
+]

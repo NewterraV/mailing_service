@@ -135,23 +135,25 @@ def send_mailings() -> None:
                 mailing.state = 'completed'
             mailing.send_today = False
             mailing.save()
-            if mailing.is_active:
-                send_and_log(mailing)
+            send_and_log(mailing)
 
 
 def send_and_log(mailing: Any):
     """Метод на основе экземпляра класса mailing собирает сообщение, отправляет его и создает запись в log"""
+    if mailing.is_active:
+        # получение контента для отправки и списка получателей
+        clients = [client.email for client in mailing.clients.all()]
+        content = Content.objects.filter(mailing=mailing.pk).first()
 
-    # получение контента для отправки и списка получателей
-    clients = [client.email for client in mailing.clients.all()]
-    content = Content.objects.filter(mailing=mailing.pk).first()
+        # Отправка письма
+        status = send_letter(clients, content)
 
-    # Отправка письма
-    status = send_letter(clients, content)
-
-    # создание лога отправки
-    log = Logs.objects.create(mailing=mailing, status=status[1], response=status[0])
-    log.save()
+        # создание лога отправки
+        log = Logs.objects.create(mailing=mailing, status=status[1], response=status[0])
+        log.save()
+    else:
+        log = Logs.objects.create(mailing=mailing, status=False, response='Рассылка была деактивирована модератором')
+        log.save()
 
 
 def get_period(period: str) -> Any:
