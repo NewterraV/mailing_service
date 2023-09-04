@@ -21,6 +21,7 @@ def get_index_context(request):
         mailing_count = None
         mailing_active = None
         mailing_launched = None
+        mailing_stopped = None
         clients = None
         users = None
 
@@ -28,6 +29,7 @@ def get_index_context(request):
         logs = Logs.objects.all().order_by('-pk')
         mailing_count = Mailing.objects.all().count()
         mailing_active = Mailing.objects.filter(is_active=True).count()
+        mailing_stopped = Mailing.objects.filter(state='stopped').count()
         mailing_launched = Mailing.objects.filter(is_active=True, state='launched').count()
         clients = Client.objects.all().distinct('email').count()
         users = User.objects.all().count()
@@ -36,6 +38,7 @@ def get_index_context(request):
         logs = Logs.objects.filter(mailing__owner=request.user).order_by('-pk')
         mailing_count = Mailing.objects.filter(owner=request.user).count()
         mailing_active = Mailing.objects.filter(owner=request.user, is_active=True).count()
+        mailing_stopped = Mailing.objects.filter(owner=request.user, state='stopped').count()
         mailing_launched = Mailing.objects.filter(owner=request.user, is_active=True, state='launched').count()
         clients = Client.objects.filter(owner=request.user).distinct('email').count()
         users = None
@@ -46,6 +49,7 @@ def get_index_context(request):
         'mailing_count': mailing_count,
         'mailing_active': mailing_active,
         'mailing_launched': mailing_launched,
+        'mailing_stopped': mailing_stopped,
         'clients': clients,
         'users': users,
         'title': 'Главная страница'
