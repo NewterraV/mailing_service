@@ -1,0 +1,20 @@
+<td>{{ object.id }}</td>
+<td>{{ object.content.name }}</td>
+<td>{{ object.start_time }} - {{ object.end_time }}</td>
+{% if object.state == 'created' %}
+  <td>Создана</td>
+{% elif object.state == 'completed' %}
+  <td>Завершена</td>
+{% elif object.state == 'launched' %}
+  <td>Запущена</td>
+{% endif %}
+<td>
+  <div class="row">
+    <div class="col">
+      <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Подробнее</a>
+      <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Редактировать</a>
+      <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Приостановить</a>
+      <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-danger btn-sm" type="button">Удалить</a>
+    </div>
+  </div>
+</td>

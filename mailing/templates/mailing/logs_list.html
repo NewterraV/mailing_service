@@ -1,0 +1,36 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">История рассылок</h1>    <div class="btn-toolbar mb-2 mb-md-0">
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th class="text-end" scope="col">Рассылка</th>
+          <th scope="col" class="text-end">Время</th>
+          <th scope="col" class="text-end">Статус</th>
+          <th scope="col" class="text-end">Ответ сервера</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in object_list %}
+          <tr>
+            <th class=" align-top col ">{{ object.id }}</th>
+            <td class=" align-top text-end ">{{ object.mailing.name }}</td>
+            <td class=" align-top col-3 text-end">{{ object.last }}</td>
+            {% if object.status %}
+              <td class="table-success align-top text-end">Успех</td>
+            {% else %}
+              <td class="table-danger align-top text-end">Ошибка</td>
+            {% endif %}
+            <td class="align-top text-end">{{ object.response }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

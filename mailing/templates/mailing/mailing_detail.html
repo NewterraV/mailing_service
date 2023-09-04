@@ -1,0 +1,87 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ object.name }}</h1>    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        {% if perms.mailing.change_mailing %}
+          <a href="{% url 'mailing:update_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        {% endif %}
+        {% if perms.mailing.send_mailing %}
+          <a href="{% url 'mailing:send_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Отправить сейчас</a>
+        {% endif %}
+        {% if perms.mailing.delete_mailing%}
+          <a href="{% url 'mailing:delete_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+   <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="align-top col-3">Период действия рассылки</th>
+        <td class="align-top text-end">{{ object.start_date }} - {{ object.end_date }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Время отправки письма</th>
+        <td class="align-top text-end">{{ object.time }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Период отправки</th>
+        <td class="align-top text-end">{{ object.get_period_display|title}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Дата следующей отправки</th>
+        <td class="align-top text-end">{{ object.next_date}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Тема письма</th>
+        <td class="align-top">{{ content.topic }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Содержимое письма</th>
+        <td class="align-top">{{content.content}}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Получатели рассылки</th>
+        <td class="align-top">
+          {% for client in clients %}
+            {{ client.email }};
+          {% endfor %}
+        </td>
+      </tr>
+    </thead>
+  </table>
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2 class="h3">История рассылок</h2>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="text-end">Время</th>
+          <th scope="col" class="text-end">Статус</th>
+          <th scope="col" class="text-end">Ответ сервера</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in logs %}
+          <tr>
+            <th class=" align-top col-3 ">{{ item.id }}</th>
+            <td class=" align-top col-3 text-end">{{ item.last }}</td>
+            {% if item.status %}
+              <td class="table-success align-top text-end">Успех</td>
+            {% else %}
+              <td class="table-danger align-top text-end">Ошибка</td>
+            {% endif %}
+            <td class="align-top text-end">{{ item.response }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

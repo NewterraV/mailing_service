@@ -10,7 +10,17 @@ packages = [{include = "mailing_service"}]
 python = "^3.11"
 django = "^4.2.4"
 psycopg2-binary = "^2.9.7"
+python-dotenv = "^1.0.0"
+django-crispy-forms = "^2.0"
+crispy-bootstrap5 = "^0.7"
+django-crontab = "^0.7.1"
+pillow = "^10.0.0"
+redis = "^5.0.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytils = "^0.4.1"
+ipython = "^8.14.0"
 
 [build-system]
 requires = ["poetry-core"]

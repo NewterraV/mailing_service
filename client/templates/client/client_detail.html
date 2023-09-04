@@ -1,0 +1,41 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ object.first_name }} {{ object.last_name }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        {% if perms.client.change_client %}
+        <a href="{% url 'client:update' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        {% endif %}
+        {% if perms.client.delete_client %}
+        <a href="{% url 'client:delete' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+   <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="align-top col-3">Имя</th>
+        <td class="align-top text-end">{{ object.first_name }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Отчество</th>
+        <td class="align-top text-end">{{ object.surname| default_if_none:"Не указано" }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Фамилия</th>
+        <td class="align-top text-end">{{ object.last_name }}</td>
+      </tr>
+      <tr>
+        <th class="align-top">Email</th>
+        <td class="align-top text-end">{{ object.email }}
+      <tr>
+        <th class="align-top">Комментарий</th>
+        <td class="align-top">{{ object.comment }}</td>
+      </tr>
+    </thead>
+  </table>
+{% endblock %}
