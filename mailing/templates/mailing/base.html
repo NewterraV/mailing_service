@@ -1,0 +1,135 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+
+
+
+    <!-- Bootstrap core CSS -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<meta name="theme-color" content="#7952b3">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css'%}" rel="stylesheet">
+  </head>
+  <body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{% url 'mailing:index' %}">Планировщик рассылок</a>
+  {% include 'users/includes/inc_authentication_bar.html' %}
+</header>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>{{ user.first_name }} {{ user.last_name }}</span>
+                {% if user.is_staff %}
+                  <span>{{user.groups.get.name}}</span>
+                {% endif %}
+                </h6>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Управление</span>
+              </h6>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mailing:index' %}">
+              <span data-feather="layers"></span>
+               Главная
+            </a>
+            <a class="nav-link" href="{% url 'mailing:mailing_list' %}">
+              <span data-feather="layers"></span>
+               Рассылки
+            </a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'client:list' %}">
+              <span data-feather="layers"></span>
+              Клиенты
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mailing:logs_list' %}">
+              <span data-feather="layers"></span>
+              История
+            </a>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+            </a>
+          </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Редактирование</span>
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            {% if perms.users.list_users %}
+              </li>
+                <a class="nav-link" href="{% url 'users:list_users' %}">
+                    <span data-feather="layers"></span>
+                     Список пользователей
+                </a>
+              </li>
+            {% endif %}
+            {% if perms.mailing.add_mailing %}
+              <a class="nav-link" href="{% url 'mailing:create_mailing' %}">
+                <span data-feather="file-text"></span>
+                Новая рассылка
+              </a>
+            {% endif %}
+            {% if perms.client.add_client %}
+              <a class="nav-link" href="{% url 'client:create' %}">
+                <span data-feather="file-text"></span>
+                Новый клиент
+              </a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+</div>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+      <script src="{% static 'js/feather.min.js' %}" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+      <script src="{% static 'js/Chart.min.js' %}" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+      <script src="{% static 'js/dashboard.js' %}"></script>
+  </body>
+</html>
+

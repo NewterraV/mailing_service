@@ -1,0 +1,33 @@
+{% extends 'mailing/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy client_form client.helper %}
+{% block content %}
+    <div class="row g-1 gx-5">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            {% if not object.pk %}
+                <h2>Добавление нового клиента</h2>
+            {% else %}
+                <h2>Редактирование клиента</h2>
+            {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="row col-12 mx-auto">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Клиент</h4>
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            {% if not object.pk %}
+                                <button class="btn btn-primary" type="submit">Создать</button>
+                            {% else %}
+                                <button class="btn btn-primary" type="submit">Сохранить</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row row p-3"></div>
+{% endblock %}

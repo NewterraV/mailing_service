@@ -1,0 +1,48 @@
+{% extends 'mailing/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy mailing_form mailing.helper %}
+{% block content %}
+    <div class="row g-1 gx-5">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            {% if not object.pk %}
+                <h2>Создание рассылки</h2>
+            {% else %}
+                <h2>Редактирование рассылки</h2>
+            {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="row col-12 mx-auto">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Настройки</h4>
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            {% if not object.pk %}
+                                <button class="btn btn-secondary" type="submit">Создать</button>
+
+                            {% else %}
+                                <button class="btn btn-secondary" type="submit">Сохранить</button>
+                            {% endif %}
+                            <a href="{% url 'mailing:mailing_list'%}" class="btn btn-outline-secondary" type="button">Отмена</a>
+                        </div>
+                    </div>
+                </div>
+                {% if formset %}
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Содержание рассылки</h4>
+                                {{ formset.management_form }}
+                                {% for form in formset.forms %}
+                                    {{ form | crispy }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div class="row row p-3"></div>
+{% endblock %}

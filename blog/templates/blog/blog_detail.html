@@ -1,0 +1,20 @@
+{% extends 'mailing/base.html' %}
+{% load templatetags %}
+{% block content %}
+  <article class="blog-post p-3">
+    <h2 class="blog-post-title">{{ object.title }}</h2>
+    <p class="blog-post-meta text-end p-0">{{ object.date_publish }}</p>
+    <p class="blog-post-meta text-end p-0">Количество просмотров: {{ object.view_count }}</p>
+    <hr>
+  </article>
+
+
+  <div class="row col-12">
+    <div class="col-6">
+      <img src=" {% mediapath object.image %} " class="img-fluid" alt="...">
+    </div>
+    <div class="col-6">
+      <p class="p-4">{{object.content}}</p>
+    </div>
+  </div>
+{% endblock %}
