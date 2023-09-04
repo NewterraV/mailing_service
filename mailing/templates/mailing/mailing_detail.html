@@ -4,9 +4,15 @@
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">{{ object.name }}</h1>    <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <a href="{% url 'mailing:update_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
-        <a href="{% url 'mailing:send_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Отправить сейчас</a>
-        <a href="{% url 'mailing:delete_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        {% if perms.mailing.change_mailing %}
+          <a href="{% url 'mailing:update_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        {% endif %}
+        {% if perms.mailing.send_mailing %}
+          <a href="{% url 'mailing:send_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Отправить сейчас</a>
+        {% endif %}
+        {% if perms.mailing.delete_mailing%}
+          <a href="{% url 'mailing:delete_mailing' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -50,15 +56,6 @@
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h2 class="h3">История рассылок</h2>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-      </div>
-      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-        This week
-      </button>
-    </div>
   </div>
 
   <div class="table-responsive">

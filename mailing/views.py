@@ -43,7 +43,8 @@ def mailing_disable(request, pk):
     return redirect(reverse('mailing:mailing_list'))
 
 
-def forcibly_send(pk):
+@permission_required('mailing.send_mailing')
+def forcibly_send(request, pk):
     """Представление функции приостановки работы рассылки"""
     mailing = Mailing.objects.get(pk=pk)
     send_and_log(mailing)
@@ -53,8 +54,14 @@ def forcibly_send(pk):
 @login_required(login_url='users:login')
 def index(request):
     """Метод представления главной страницы"""
+
+    if request.user.is_staff:
+        object_list = Logs.objects.all().order_by('-pk')
+    else:
+        object_list = Logs.objects.filter(mailing__owner=request.user).order_by('-pk')
+
     context = {
-        'object_list': Logs.objects.filter(mailing__owner=request.user).order_by('-pk'),
+        'object_list': object_list,
         'title': 'Главная страница'
     }
 
@@ -136,7 +143,6 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingForm
         formset = context_data['formset']
 
         if formset.is_valid():
-            self.object = form.save()
             if self.object.next_date < self.object.start_date:
                 self.object.next_date = self.object.start_date
             set_state_mailing(self.object)

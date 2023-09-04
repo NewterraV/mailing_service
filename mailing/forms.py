@@ -22,7 +22,7 @@ class MailingForm(StyleMixin, forms.ModelForm):
 
     class Meta:
         model = Mailing
-        exclude = 'state', 'send_today', 'owner', 'next_date'
+        exclude = 'state', 'send_today', 'owner', 'next_date', 'is_active'
 
     def __init__(self, *args, **kwargs):
         """Переопределение для фильтрации содержимого поля clients"""
@@ -32,15 +32,15 @@ class MailingForm(StyleMixin, forms.ModelForm):
 
         self.fields['clients'].queryset = Client.objects.filter(owner=self.user)
 
-
-    def clean_start_date(self):
-        """Метод проверяет, что введенная дата больше или равна текущей"""
-        now = datetime.now().date()
-        cleaned_data = self.cleaned_data.get('start_date')
-        if cleaned_data < now:
-            raise forms.ValidationError('Дата начала рассылки не может быть ранее текущей даты.')
-
-        return cleaned_data
+    # Возникает баг, при котором во время редатирования возникает ошибка сравнения
+    # def clean_start_date(self):
+    #     """Метод проверяет, что введенная дата больше или равна текущей"""
+    #     now = datetime.now().date()
+    #     cleaned_data = self.cleaned_data.get('start_date')
+    #     if cleaned_data < now:
+    #         raise forms.ValidationError('Дата начала рассылки не может быть ранее текущей даты.')
+    #
+    #     return cleaned_data
 
     def clean_end_date(self):
         """Метод проверяет, что введенная дата больше или равна текущей"""

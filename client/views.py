@@ -46,6 +46,13 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     login_url = 'users:login'
     permission_required = 'client.add_client'
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.save()
+        # self.object.owner = self.request.user
+        # self.object.save()
+        return super().form_valid(form)
+
 
 class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Client

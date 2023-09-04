@@ -81,14 +81,6 @@
               <span data-feather="layers"></span>
               История
             </a>
-          {% if perms.users.list_users %}
-            </li>
-              <a class="nav-link" href="{% url 'users:list_users' %}">
-                  <span data-feather="layers"></span>
-                   Список пользователей
-              </a>
-            </li>
-          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="#">
             </a>
@@ -100,14 +92,26 @@
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'mailing:create_mailing' %}">
-              <span data-feather="file-text"></span>
-              Новая рассылка
-            </a>
-            <a class="nav-link" href="{% url 'client:create' %}">
-              <span data-feather="file-text"></span>
-              Новый клиент
-            </a>
+            {% if perms.users.list_users %}
+              </li>
+                <a class="nav-link" href="{% url 'users:list_users' %}">
+                    <span data-feather="layers"></span>
+                     Список пользователей
+                </a>
+              </li>
+            {% endif %}
+            {% if perms.mailing.add_mailing %}
+              <a class="nav-link" href="{% url 'mailing:create_mailing' %}">
+                <span data-feather="file-text"></span>
+                Новая рассылка
+              </a>
+            {% endif %}
+            {% if perms.client.add_client %}
+              <a class="nav-link" href="{% url 'client:create' %}">
+                <span data-feather="file-text"></span>
+                Новый клиент
+              </a>
+            {% endif %}
           </li>
         </ul>
       </div>

@@ -42,6 +42,14 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
     login_url = 'users:login'
     permission_required = 'users.block_users'
+    extra_context = {
+        'title': 'Пользователи'
+    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = User.objects.all().order_by('first_name')
+        return context
 
 
 class LoginView(BaseLoginView):
@@ -57,6 +65,9 @@ class RegisterView(CreateView):
     """Класс для отображения формы регистрации пользователя"""
     model = User
     form_class = RegisterForm
+    extra_context = {
+        'title': 'Регистрация'
+    }
 
     def form_valid(self, form):
         self.object = form.save()
@@ -78,6 +89,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserUpdateForm
     success_url = reverse_lazy('mailing:index')
+    extra_context = {
+        'title': 'Редактирование профиля'
+    }
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -87,6 +101,9 @@ class VerifyUpdateView(UpdateView):
     """Класс для отображения проверки кода верификации после регистрации"""
     model = VerifyCode
     form_class = VerifyForm
+    extra_context = {
+        'title': 'Верификация пользователя'
+    }
 
     def form_valid(self, form):
         self.object = form.save()

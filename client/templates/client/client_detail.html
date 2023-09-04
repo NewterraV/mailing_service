@@ -5,8 +5,12 @@
     <h1 class="h2">{{ object.first_name }} {{ object.last_name }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
+        {% if perms.client.change_client %}
         <a href="{% url 'client:update' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        {% endif %}
+        {% if perms.client.delete_client %}
         <a href="{% url 'client:delete' object.pk %}" type="button" class="btn btn-sm btn-outline-secondary">Удалить</a>
+        {% endif %}
       </div>
     </div>
   </div>
