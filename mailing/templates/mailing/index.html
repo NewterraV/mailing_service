@@ -1,49 +1,89 @@
 {% extends 'mailing/base.html' %}
-
+{% load templatetags %}
 {% block content %}
-
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Мониторинг рассылок</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+    <h1 class="h2">Статистика</h1>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col" class="text-end">Название</th>
+              <th scope="col" class="text-end">Время</th>
+              <th scope="col" class="text-end">Статус</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+              <tr>
+                <td>{{ log.id }}</td>
+                <td class="text-end">{{ log.mailing.name|truncatechars:50}}</td>
+                <td class="text-end">{{ log.last }}</td>
+                {% if log.status %}
+                  <td class="table-success align-top text-end">Успех</td>
+                {% else %}
+                  <td class="table-danger align-top text-end">Ошибка</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-        This week
-      </button>
+    </div>
+    <div class="col-4">
+      <div class="table-responsive ">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th class="align-top ">Всего рассылок</th>
+              <td class="align-top text-end">{{ mailing_count }}</td>
+            </tr>
+            <tr>
+              <th class="align-top">Активных рассылок</th>
+              <td class="align-top text-end">{{ mailing_active }}</td>
+            </tr>
+            <tr>
+              <th class="align-top">Запущено рассылок</th>
+              <td class="align-top text-end">{{ mailing_launched }}</td>
+            </tr>
+            <tr>
+              <th class="align-top">Количество уникальных получателей</th>
+              <td class="align-top text-end">{{ clients }}</td>
+            </tr>
+            {% if user.is_staff %}
+              <tr>
+                <th class="align-top">Количество пользователей</th>
+                <td class="align-top text-end">{{ users }}</td>
+              </tr>
+            {% endif %}
+          </thead>
+        </table>
+      </div>
     </div>
   </div>
 
-  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-  <h2>Журнал рассылок</h2>
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col" class="text-end">Название</th>
-          <th scope="col" class="text-end">Время</th>
-          <th scope="col" class="text-end">Статус</th>
-          <th scope="col" class="text-end">Ответ сервера</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for object in object_list %}
-          <tr>
-            <td>{{ object.id }}</td>
-            <td class="text-end">{{ object.mailing.name}}</td>
-            <td class="text-end">{{ object.last }}</td>
-            {% if object.status %}
-              <td class="table-success align-top text-end">Успех</td>
-            {% else %}
-              <td class="table-danger align-top text-end">Ошибка</td>
-            {% endif %}
-            <td class="text-end">{{ object.response }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Полезные статьи</h1>
   </div>
+  {% for blog in blogs %}
+    <div class="card mb-3" style="">
+        <div class="row g-0">
+          <div class="col-md-3">
+            <img src="{% mediapath blog.image %}" class="img-fluid rounded-start" style="max-width: 250px;" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ blog.title }}</h5>
+              <p class="card-text">{{blog.content|truncatechars:200}}</p>
+              <p class="card-text"><small class="text-body-secondary">Просмотров: {{blog.view_count}}</small></p>
+              <a href="{% url 'blog:blog_detail' blog.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Читать</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endfor %}
 {% endblock %}

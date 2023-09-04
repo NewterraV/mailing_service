@@ -19,7 +19,12 @@
           <th scope="col" class="col-3">Название</th>
           <th scope="col" class="col-2">Период</th>
           <th scope="col" class="col-1">Состояние</th>
+          {% if user.is_staff %}
+            <th scope="col" class="col-1">Владелец</th>
+            <th scope="col" class="col-5">Действия</th>
+          {% else %}
           <th scope="col" class="col-6">Действия</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -39,6 +44,9 @@
                 <td class="table-success ">Запущена</td>
               {% elif object.state == 'stopped' %}
                 <td class="table-warning ">Остановлена</td>
+              {% endif %}
+              {% if user.is_staff %}
+                <td>{{ object.owner }}</td>
               {% endif %}
               <td>
                 <div class="row">

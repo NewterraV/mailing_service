@@ -6,9 +6,13 @@ from mailing.forms import MailingForm, ContentForm
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
 from mailing.services import set_state_stopped, set_state_mailing, send_and_log, set_is_active
+from blog.models import Blog
+from users.models import User
+from client.models import Client
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
+from random import sample
 
 
 class MailingFormsetMixin:
@@ -54,14 +58,41 @@ def forcibly_send(request, pk):
 @login_required(login_url='users:login')
 def index(request):
     """Метод представления главной страницы"""
+    blogs = list(Blog.objects.all())
 
-    if request.user.is_staff:
-        object_list = Logs.objects.all().order_by('-pk')
+    if request.user.is_anonymous:
+        logs = Logs.objects.all().order_by('-pk')
+        mailing_count = None
+        mailing_active = None
+        mailing_launched = None
+        clients = None
+        users = None
+
+    elif request.user.is_staff:
+        logs = Logs.objects.all().order_by('-pk')
+        mailing_count = Mailing.objects.all().count()
+        mailing_active = Mailing.objects.filter(is_active=True).count()
+        mailing_launched = Mailing.objects.filter(is_active=True, state='launched').count()
+        clients = Client.objects.all().distinct('email').count()
+        users = User.objects.all().count()
+
     else:
-        object_list = Logs.objects.filter(mailing__owner=request.user).order_by('-pk')
+        logs = Logs.objects.filter(mailing__owner=request.user).order_by('-pk')
+        mailing_count = Mailing.objects.filter(owner=request.user).count()
+        mailing_active = Mailing.objects.filter(owner=request.user, is_active=True).count()
+        mailing_launched = Mailing.objects.filter(owner=request.user, is_active=True, state='launched').count()
+        clients = Client.objects.filter(owner=request.user).distinct('email').count()
+        users = None
 
     context = {
-        'object_list': object_list,
+        'logs': logs[:10],
+        'logs_count': len(logs),
+        'mailing_count': mailing_count,
+        'mailing_active': mailing_active,
+        'mailing_launched': mailing_launched,
+        'blogs': sample(blogs, 3),
+        'clients': clients,
+        'users': users,
         'title': 'Главная страница'
     }
 

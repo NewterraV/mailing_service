@@ -21,7 +21,12 @@
           <th scope="col">Имя</th>
           <th scope="col">Фамилия</th>
           <th scope="col">Email</th>
+          {% if user.is_staff %}
+            <th scope="col" >Владелец</th>
+            <th scope="col" >Действия</th>
+          {% else %}
           <th scope="col">Действия</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -31,6 +36,9 @@
               <td>{{ object.first_name}}</td>
               <td>{{ object.last_name}}</td>
               <td>{{ object.email }}</td>
+              {% if user.is_staff %}
+                <td>{{ object.owner }}</td>
+              {% endif %}
               <td>
                 <div class="row">
                   <div class="col">
