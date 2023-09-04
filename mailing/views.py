@@ -5,9 +5,10 @@ from django.urls import reverse_lazy, reverse
 from mailing.forms import MailingForm, ContentForm
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
-from mailing.services import set_state_stopped, set_state_mailing, send_and_log
+from mailing.services import set_state_stopped, set_state_mailing, send_and_log, set_is_active
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 class MailingFormsetMixin:
@@ -26,9 +27,15 @@ class MailingFormsetMixin:
         return context_data
 
 
-def stopped(pk):
+def stopped(request, pk):
     """Представление функции приостановки работы рассылки"""
     set_state_stopped(pk)
+    return redirect(reverse('mailing:mailing_list'))
+
+
+def mailing_disable(request, pk):
+    """Представление функции отключения рассылки"""
+    set_is_active(pk)
     return redirect(reverse('mailing:mailing_list'))
 
 
@@ -39,12 +46,14 @@ def forcibly_send(pk):
     return redirect(reverse('mailing:mailing', args=[pk]))
 
 
+@login_required(login_url='users:login')
 def index(request):
     """Метод представления главной страницы"""
     context = {
-        'object_list': Logs.objects.all().order_by('-pk'),
+        'object_list': Logs.objects.filter(mailing__owner=request.user).order_by('-pk'),
         'title': 'Главная страница'
     }
+
     return render(request, 'mailing/index.html', context)
 
 
@@ -109,7 +118,6 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingForm
     login_url = 'users:login'
     permission_required = 'mailing.change_mailing'
     extra = 0  # переменная для ограничения форм сета
-
 
     def get_form_kwargs(self):
         """Метод передает авторизованного пользователя в kwargs"""

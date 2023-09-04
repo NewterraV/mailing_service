@@ -9,11 +9,15 @@ from smtplib import (SMTPServerDisconnected, SMTPSenderRefused,
 from typing import Any
 
 
-def set_state_stopped(pk: str) -> None:
+def set_state_stopped(pk: str,) -> None:
     """Метод принимает primary key и на основе него меняет атрибут state экземпляра класса Mailing"""
+
     mailing = get_object_or_404(Mailing, pk=pk)
 
-    if mailing.state in ['launched', 'created']:
+    if mailing.state == 'disabled':
+        return
+
+    elif mailing.state in ['launched', 'created']:
         mailing.state = 'stopped'
         mailing.send_today = False
         mailing.save()
@@ -22,6 +26,15 @@ def set_state_stopped(pk: str) -> None:
         mailing.state = 'created'
         set_state_mailing(mailing)
         mailing.save()
+
+
+def set_is_active(pk: str,) -> None:
+    """Метод переключает статус активации рассылки"""
+
+    mailing = get_object_or_404(Mailing, pk=pk)
+    mailing.is_active = False if mailing.is_active else True
+    mailing.save()
+
 
 
 def set_state_mailings() -> None:
@@ -37,11 +50,8 @@ def set_state_mailing(mailing: Any) -> None:
     """Метод принимает экземпляр рассылки. На основе текущей даты меняет статусы рассылки и
     флаг необходимости отправки рассылки в текущую дату"""
     date_now = date.today()
-    # if mailing.next_date is None:
-    #     mailing.next_date = mailing.start_date
-    #     mailing.save()
 
-    if mailing.state == 'stopped':
+    if mailing.state in 'stopped':
         return
 
     if mailing.start_date <= date_now <= mailing.end_date:
@@ -77,8 +87,8 @@ def send_mailings() -> None:
                 mailing.state = 'completed'
             mailing.send_today = False
             mailing.save()
-
-            send_and_log(mailing)
+            if mailing.is_active:
+                send_and_log(mailing)
 
 
 def send_and_log(mailing: Any):

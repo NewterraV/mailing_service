@@ -29,7 +29,9 @@ class Mailing(models.Model):
     end_date = models.DateField(verbose_name='Дата окончания рассылки')
     next_date = models.DateField(**NULLABLE, verbose_name='дата следующей отправки')
     period = models.CharField(max_length=5, choices=PERIOD, verbose_name='Периодичность рассылки')  # day, week, month
-    state = models.CharField(max_length=10, choices=STATE, default='created', verbose_name='Статус рассылки')  # completed, created, launched
+    # completed, created, launched, stopped
+    state = models.CharField(max_length=10, choices=STATE, default='created', verbose_name='Статус рассылки')
+    is_active = models.BooleanField(default=True, verbose_name='статус активации')
     clients = models.ManyToManyField('client.Client', verbose_name='клиенты рассылки')
     send_today = models.BooleanField(default=False, **NULLABLE, verbose_name='отправка сегодня')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='Владелец')

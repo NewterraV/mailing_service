@@ -14,16 +14,14 @@
   </div>
 
   <div class="table pt-3">
-    <table class="table table-sm">
+    <table class="table table-sm col-12">
       <thead>
         <tr>
-          <th scope="col">id</th>
-          <th scope="col">Название</th>
-          <th scope="col">Период</th>
-          <th scope="col">Состояние</th>
-          <th scope="col">Действия</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
+          <th scope="col" class="">id</th>
+          <th scope="col" class="col-3">Название</th>
+          <th scope="col" class="col-2">Период</th>
+          <th scope="col" class="col-1">Состояние</th>
+          <th scope="col" class="col-6">Действия</th>
         </tr>
       </thead>
       <tbody>
@@ -33,34 +31,40 @@
               <td>{{ object.name}}</td>
               <td class="row">C {{ object.start_date }}</td>
               <td class="row"> по {{ object.end_date }}</td>
-              {% if object.state == 'created' %}
-                <td class="table-info">Создана</td>
+              {% if not object.is_active %}
+                <td class="table-danger ">Отключена</td>
+              {% elif object.state == 'created' %}
+                <td class="table-info ">Создана</td>
               {% elif object.state == 'completed' %}
-                <td class="table-danger">Завершена</td>
+                <td class="table-primary ">Завершена</td>
               {% elif object.state == 'launched' %}
-                <td class="table-success">Запущена</td>
+                <td class="table-success ">Запущена</td>
               {% elif object.state == 'stopped' %}
-                <td class="table-warning">Остановлена</td>
+                <td class="table-warning ">Остановлена</td>
               {% endif %}
               <td>
                 <div class="row">
                   <div class="col">
                     <a href="{% url 'mailing:mailing' object.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Подробнее</a>
                     <a href="{% url 'mailing:update_mailing' object.pk %}" class="btn btn-outline-secondary btn-sm" type="button">Редактировать</a>
+                    {% if user.is_staff %}
+                      {% if object.is_active %}
+                        <a href="{% url 'mailing:disable_mailing' object.pk %}" class="btn btn-secondary btn-sm col-3" type="button">Отключить</a>
+                      {% elif not object.is_active %}
+                        <a href="{% url 'mailing:disable_mailing' object.pk %}" class="btn btn-secondary btn-sm col-3" type="button">Включить</a>
+                      {% endif %}
+                    {% else %}
+                      {% if object.state in 'created,launched' %}
+                        <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm col-4" type="button">Приостановить</a>
+                      {% elif object.state == 'stopped' %}
+                        <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm col-4" type="button">Запустить</a>
+                      {% else %}
+                        <a  class="btn btn-secondary btn-sm disabled" type="button" >Приостановить</a>
+                      {% endif %}
+                  {% endif %}
+                    <a href="{% url 'mailing:delete_mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Удалить</a>
                   </div>
                 </div>
-              </td>
-              <td>
-                {% if object.state in 'created,launched' %}
-                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm" type="button">Приостановить</a>
-                    {% elif object.state == 'stopped' %}
-                      <a href="{% url 'mailing:stopped_mailing' object.pk %}" class="btn btn-secondary btn-sm" type="button">Запустить</a>
-                    {% else %}
-                      <a  class="btn btn-secondary btn-sm disabled" type="button" >Приостановить</a>
-                    {% endif %}
-              </td>
-              <td>
-                <a href="{% url 'mailing:delete_mailing' object.pk %}" class="btn btn-outline-dark btn-sm" type="button">Удалить</a>
               </td>
             </tr>
         {% endfor %}

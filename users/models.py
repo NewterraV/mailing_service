@@ -5,8 +5,8 @@ from mailing.models import NULLABLE
 
 class User(AbstractUser):
     username = None
-    last_name = models.CharField(max_length=50, verbose_name='имя')
-    first_name = models.CharField(max_length=50, verbose_name='фамилия')
+    last_name = models.CharField(max_length=50, verbose_name='фамилия')
+    first_name = models.CharField(max_length=50, verbose_name='имя')
     email = models.EmailField(verbose_name='email', unique=True)
     is_active = models.BooleanField(
         default=False, verbose_name='статус верификации')
