@@ -55,13 +55,12 @@ def forcibly_send(request, pk):
     return redirect(reverse('mailing:mailing', args=[pk]))
 
 
-@login_required(login_url='users:login')
 def index(request):
     """Метод представления главной страницы"""
     blogs = list(Blog.objects.all())
 
     if request.user.is_anonymous:
-        logs = Logs.objects.all().order_by('-pk')
+        logs = None
         mailing_count = None
         mailing_active = None
         mailing_launched = None
@@ -85,8 +84,8 @@ def index(request):
         users = None
 
     context = {
-        'logs': logs[:10],
-        'logs_count': len(logs),
+        'logs': logs[:10] if logs else None,
+        'logs_count': len(logs) if logs else None,
         'mailing_count': mailing_count,
         'mailing_active': mailing_active,
         'mailing_launched': mailing_launched,
@@ -99,7 +98,7 @@ def index(request):
     return render(request, 'mailing/index.html', context)
 
 
-class LogsListView(ListView):
+class LogsListView(LoginRequiredMixin, ListView):
     model = Logs
     extra_context = {
         'title': 'История рассылок'

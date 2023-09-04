@@ -1,70 +1,71 @@
 {% extends 'mailing/base.html' %}
 {% load templatetags %}
 {% block content %}
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Статистика</h1>
-  </div>
-  <div class="row">
-    <div class="col-8">
-      <div class="table-responsive">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col" class="text-end">Название</th>
-              <th scope="col" class="text-end">Время</th>
-              <th scope="col" class="text-end">Статус</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in logs %}
+  {% if user.is_authenticated%}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Статистика</h1>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
               <tr>
-                <td>{{ log.id }}</td>
-                <td class="text-end">{{ log.mailing.name|truncatechars:50}}</td>
-                <td class="text-end">{{ log.last }}</td>
-                {% if log.status %}
-                  <td class="table-success align-top text-end">Успех</td>
-                {% else %}
-                  <td class="table-danger align-top text-end">Ошибка</td>
-                {% endif %}
+                <th scope="col">#</th>
+                <th scope="col" class="text-end">Название</th>
+                <th scope="col" class="text-end">Время</th>
+                <th scope="col" class="text-end">Статус</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for log in logs %}
+                <tr>
+                  <td>{{ log.id }}</td>
+                  <td class="text-end">{{ log.mailing.name|truncatechars:50}}</td>
+                  <td class="text-end">{{ log.last }}</td>
+                  {% if log.status %}
+                    <td class="table-success align-top text-end">Успех</td>
+                  {% else %}
+                    <td class="table-danger align-top text-end">Ошибка</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="table-responsive ">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th class="align-top ">Всего рассылок</th>
+                <td class="align-top text-end">{{ mailing_count }}</td>
+              </tr>
+              <tr>
+                <th class="align-top">Активных рассылок</th>
+                <td class="align-top text-end">{{ mailing_active }}</td>
+              </tr>
+              <tr>
+                <th class="align-top">Запущено рассылок</th>
+                <td class="align-top text-end">{{ mailing_launched }}</td>
+              </tr>
+              <tr>
+                <th class="align-top">Количество уникальных получателей</th>
+                <td class="align-top text-end">{{ clients }}</td>
+              </tr>
+              {% if user.is_staff %}
+                <tr>
+                  <th class="align-top">Количество пользователей</th>
+                  <td class="align-top text-end">{{ users }}</td>
+                </tr>
+              {% endif %}
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
-    <div class="col-4">
-      <div class="table-responsive ">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th class="align-top ">Всего рассылок</th>
-              <td class="align-top text-end">{{ mailing_count }}</td>
-            </tr>
-            <tr>
-              <th class="align-top">Активных рассылок</th>
-              <td class="align-top text-end">{{ mailing_active }}</td>
-            </tr>
-            <tr>
-              <th class="align-top">Запущено рассылок</th>
-              <td class="align-top text-end">{{ mailing_launched }}</td>
-            </tr>
-            <tr>
-              <th class="align-top">Количество уникальных получателей</th>
-              <td class="align-top text-end">{{ clients }}</td>
-            </tr>
-            {% if user.is_staff %}
-              <tr>
-                <th class="align-top">Количество пользователей</th>
-                <td class="align-top text-end">{{ users }}</td>
-              </tr>
-            {% endif %}
-          </thead>
-        </table>
-      </div>
-    </div>
-  </div>
-
+  {% endif %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Полезные статьи</h1>
