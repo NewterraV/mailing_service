@@ -13,12 +13,14 @@ PERIOD = (
 
 
 class StyleMixin:
+    """Класс добавляющий форматирование форм crispy-forms"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
 
 
 class MailingForm(StyleMixin, forms.ModelForm):
+    """Класс описывающий форму для создания новой рассылки"""
 
     class Meta:
         model = Mailing
@@ -53,7 +55,7 @@ class MailingForm(StyleMixin, forms.ModelForm):
 
 
 class ContentForm(StyleMixin, forms.ModelForm):
-
+    """Класс описывающий форму для создания содержимого рассылки"""
     class Meta:
         model = Content
         exclude = 'settings',

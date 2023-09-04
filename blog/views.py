@@ -3,7 +3,9 @@ from django.views.generic import DetailView
 
 from blog.models import Blog
 
+
 class BlogDetailView(DetailView):
+    """Метод для отображения детальной информации блога"""
     model = Blog
 
     def get_object(self, queryset=None):

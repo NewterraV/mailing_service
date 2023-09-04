@@ -4,6 +4,7 @@ from django.conf import settings
 
 
 class Client(models.Model):
+    """Модель описывающая получателя рассылки"""
 
     first_name = models.CharField(max_length=50, verbose_name='имя')
     surname = models.CharField(max_length=50, verbose_name='отчество', **NULLABLE)

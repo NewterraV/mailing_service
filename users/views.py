@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 
 
 def reset_password(request):
-
+    """Представление для сброса пароля пользователя"""
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
 
@@ -34,11 +34,13 @@ def reset_password(request):
 
 @permission_required('users.block_users')
 def block_user_view(request, pk):
+    """Представление для блокировки пользователя"""
     block_user(pk)
     return redirect(reverse('users:list_users'))
 
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    """Клас для представления списка пользователей"""
     model = User
     login_url = 'users:login'
     permission_required = 'users.block_users'
@@ -47,17 +49,20 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     }
 
     def get_context_data(self, **kwargs):
+        """Переопределение добавляет сортировку списка пользователей"""
         context = super().get_context_data(**kwargs)
         context['object_list'] = User.objects.all().order_by('first_name')
         return context
 
 
 class LoginView(BaseLoginView):
+    """Класс для представления авторизации пользователя"""
     form_class = LoginForm
     template_name = 'users/login.html'
 
 
 class LogoutView(BaselogoutView):
+    """Класс для представления выхода пользователя"""
     pass
 
 
@@ -70,6 +75,7 @@ class RegisterView(CreateView):
     }
 
     def form_valid(self, form):
+        """Переопределение добавляет создание и отправку кода верификации пользователя"""
         self.object = form.save()
 
         group = Group.objects.get(name='user')
@@ -85,6 +91,7 @@ class RegisterView(CreateView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
+    """Класс для представления редактирования пользователя"""
     login_url = 'users:login'
     model = User
     form_class = UserUpdateForm
@@ -106,6 +113,7 @@ class VerifyUpdateView(UpdateView):
     }
 
     def form_valid(self, form):
+        """Переопределение добавляет активацию пользователя и удаление записи кода верификации"""
         self.object = form.save()
 
         # Сверяем код введеный пользователем

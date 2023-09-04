@@ -16,9 +16,11 @@ from django.core.cache import cache
 
 
 class MailingFormsetMixin:
+    """Миксин добавляющий формсет для классов создания и обновления рассылки"""
     extra = 1
 
     def get_context_data(self, **kwargs):
+        """Переопределние добавляет формсет содержания рассылки"""
 
         context_data = super().get_context_data(**kwargs)
         content_formset = inlineformset_factory(Mailing, Content, form=ContentForm, extra=self.extra)
@@ -72,6 +74,7 @@ def index(request):
 
 
 class LogsListView(LoginRequiredMixin, ListView):
+    """Класс для представления списка логов рассылок"""
     model = Logs
     extra_context = {
         'title': 'История рассылок'
@@ -79,6 +82,7 @@ class LogsListView(LoginRequiredMixin, ListView):
     login_url = 'users:login'
 
     def get_queryset(self, *args, **kwargs):
+        """Переопределение для учета типа пользователя"""
         if self.request.user.is_staff:
             queryset = super().get_queryset().all().order_by('-pk')
         else:
@@ -87,6 +91,7 @@ class LogsListView(LoginRequiredMixin, ListView):
 
 
 class MailingListView(LoginRequiredMixin,  ListView):
+    """Класс для представления списка рассылок"""
     model = Mailing
     extra_context = {
         'title': 'Рассылки'
@@ -103,26 +108,29 @@ class MailingListView(LoginRequiredMixin,  ListView):
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
+    """Класс для представления детальной информации о рассылке"""
     model = Mailing
     login_url = 'users:login'
 
     def get_object(self, queryset=None):
+        """Переопределение для ограничения доступа к детальной информации всех кроме владельца"""
         self.object = super().get_object(queryset)
         if self.object.owner != self.request.user and not self.request.user.is_staff:
             raise Http404
         return self.object
 
     def get_context_data(self, **kwargs):
+        """Переопределение для добавления дополнительной информации"""
         context = super().get_context_data(**kwargs)
         context['logs'] = Logs.objects.filter(mailing=self.kwargs.get('pk')).order_by('-pk')
         context['content'] = Content.objects.filter(mailing=self.kwargs.get('pk')).first()
         context['clients'] = self.object.clients.all()
-        # print(context.content.content)
         context['title'] = f'Рассылка - {self.object.name}'
         return context
 
 
 class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingFormsetMixin, UpdateView):
+    """Класс для представления обновления рассылки"""
     model = Mailing
     form_class = MailingForm
     extra_context = {
@@ -140,7 +148,7 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingForm
         return kwargs
 
     def form_valid(self, form):
-
+        """Переопределние для установки даты следующей рассылки и сохранения формсета"""
         context_data = self.get_context_data()
         self.object = form.save()
         formset = context_data['formset']
@@ -158,6 +166,7 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, MailingForm
 
 
 class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Класс для представления удаления рассылки"""
     model = Mailing
     extra_context = {
         'title': 'Удаление рассылки'
@@ -168,6 +177,7 @@ class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
 
 class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, MailingFormsetMixin, CreateView):
+    """Класс для представления создания рассылки"""
     login_url = 'users:login'
     model = Mailing
     extra_context = {
@@ -183,9 +193,8 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, MailingForm
         kwargs.update({'user': self.request.user})
         return kwargs
 
-    
     def form_valid(self, form):
-
+        """Переопределние для установки владельца, даты следующей рассылки и сохранения формсета"""
         context_data = self.get_context_data()
         formset = context_data['formset']
         if formset.is_valid():

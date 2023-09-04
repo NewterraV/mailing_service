@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 
 class ClientListView(LoginRequiredMixin, ListView):
+    """Класс отображения списка получателей"""
     model = Client
     extra_context = {
         'title': 'Клиенты'
@@ -15,6 +16,7 @@ class ClientListView(LoginRequiredMixin, ListView):
     login_url = 'users:login'
 
     def get_queryset(self, *args, **kwargs):
+        """Переопределение для учета типа пользователя"""
         if self.request.user.is_staff:
             queryset = super().get_queryset().all().order_by('first_name')
         else:
@@ -23,6 +25,7 @@ class ClientListView(LoginRequiredMixin, ListView):
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
+    """Класс для отображения детальной информации о получателе"""
     model = Client
     extra_context = {
         'title': 'Клиент'
@@ -30,6 +33,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     login_url = 'users:login'
 
     def get_object(self, queryset=None):
+        """Переопределение для ограничения доступа к детальной информации всех кроме владельца"""
         self.object = super().get_object(queryset)
         if self.object.owner != self.request.user and not self.request.user.is_staff:
             raise Http404
@@ -37,6 +41,7 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 
 
 class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """Класс для отображения создания нового получателя"""
     model = Client
     form_class = ClientForm
     extra_context = {
@@ -47,14 +52,14 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'client.add_client'
 
     def form_valid(self, form):
+        """Переопределение для добавления владельца записи"""
         form.instance.owner = self.request.user
         form.save()
-        # self.object.owner = self.request.user
-        # self.object.save()
         return super().form_valid(form)
 
 
 class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """Класс для отображения редактирования получателя"""
     model = Client
     form_class = ClientForm
     extra_context = {
@@ -68,6 +73,7 @@ class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Класс для удаления получателя"""
     model = Client
     success_url = reverse_lazy('client:list')
     login_url = 'users:login'
