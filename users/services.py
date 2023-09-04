@@ -1,6 +1,27 @@
 from random import randint
 from django.core.mail import send_mail
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from mailing.models import Mailing
+from users.models import User
+
+
+def block_user(pk):
+    user = get_object_or_404(User, pk=str(pk))
+    if user.is_active:
+        user.is_active = False
+        user.save()
+        mailings = Mailing.objects.filter(owner=user)
+        for mailing in mailings:
+            mailing.is_active = False
+            mailing.save()
+    else:
+        user.is_active = True
+        user.save()
+        mailings = Mailing.objects.filter(owner=user)
+        for mailing in mailings:
+            mailing.is_active = True
+            mailing.save()
 
 
 def generate_code():

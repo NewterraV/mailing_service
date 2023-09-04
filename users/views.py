@@ -1,11 +1,15 @@
 from django.shortcuts import redirect, render
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.contrib.auth.views import LoginView as BaseLoginView, LogoutView as BaselogoutView
 from users.forms import LoginForm, RegisterForm, VerifyForm, UserUpdateForm, ResetPasswordForm
 from users.models import User, VerifyCode
 from users.services import generate_code, send_verification_mail, send_reset_password_mail
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from users.services import block_user
+from django.shortcuts import get_object_or_404
 
 
 def reset_password(request):
@@ -26,6 +30,18 @@ def reset_password(request):
         form = ResetPasswordForm()
 
     return render(request, 'users/reset_password.html', {'form': form})
+
+
+@permission_required('users.block_users')
+def block_user_view(request, pk):
+    block_user(pk)
+    return redirect(reverse('users:list_users'))
+
+
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = User
+    login_url = 'users:login'
+    permission_required = 'users.block_users'
 
 
 class LoginView(BaseLoginView):
@@ -57,7 +73,8 @@ class RegisterView(CreateView):
         return redirect(reverse('users:verify', args=[self.object.pk]))
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = 'users:login'
     model = User
     form_class = UserUpdateForm
     success_url = reverse_lazy('mailing:index')

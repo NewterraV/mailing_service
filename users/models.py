@@ -17,6 +17,10 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'пользователь'
         verbose_name_plural = 'пользователи'
+        permissions = [
+            ('list_users', 'Просмотр списка пользователей',),
+            ('block_users', 'Блокировка пользователя',)
+        ]
 
 
 class VerifyCode(models.Model):

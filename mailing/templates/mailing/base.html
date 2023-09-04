@@ -81,7 +81,14 @@
               <span data-feather="layers"></span>
               История
             </a>
-          </li>
+          {% if perms.users.list_users %}
+            </li>
+              <a class="nav-link" href="{% url 'users:list_users' %}">
+                  <span data-feather="layers"></span>
+                   Список пользователей
+              </a>
+            </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="#">
             </a>
