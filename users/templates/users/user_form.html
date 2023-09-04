@@ -25,6 +25,7 @@
                                     <a href="{% url 'users:reset_password' %}" class="btn btn-link" type="submit">Сброс пароля</a>
                                 </div>
                                 <button class="btn btn-secondary mt-4" type="submit">Сохранить</button>
+                                <a href="{% url 'users:delete_user' %}" class="btn btn-outline-secondary mt-4" type="submit">Удалить</a>
                                 <a href="{% url 'mailing:index' %}" class="btn btn-link mt-4" type="submit">Отмена</a>
                             {% endif %}
                         </div>

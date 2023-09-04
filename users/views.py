@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 from django.contrib.auth.views import LoginView as BaseLoginView, LogoutView as BaselogoutView
 from users.forms import LoginForm, RegisterForm, VerifyForm, UserUpdateForm, ResetPasswordForm
 from users.models import User, VerifyCode
@@ -103,6 +103,17 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('mailing:index')
+    login_url = 'mailing:index'
+    extra_context = {
+        'title': 'Удалить пользователя?'
+    }
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 class VerifyUpdateView(UpdateView):
     """Класс для отображения проверки кода верификации после регистрации"""
