@@ -42,6 +42,10 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+        permissions = [
+            ('stop_mailing', 'Приостановка действия рассылки',),
+            ('disable_mailing', 'Отключение рассылки',)
+        ]
 
 
 class Content(models.Model):

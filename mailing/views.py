@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from mailing.services import set_state_stopped, set_state_mailing, send_and_log, set_is_active
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 class MailingFormsetMixin:
@@ -27,12 +27,16 @@ class MailingFormsetMixin:
         return context_data
 
 
+@permission_required('mailing.stop_mailing')
 def stopped(request, pk):
     """Представление функции приостановки работы рассылки"""
+    if request.user.is_staff:
+        raise
     set_state_stopped(pk)
     return redirect(reverse('mailing:mailing_list'))
 
 
+@permission_required('mailing.disable_mailing')
 def mailing_disable(request, pk):
     """Представление функции отключения рассылки"""
     set_is_active(pk)

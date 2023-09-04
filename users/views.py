@@ -5,6 +5,7 @@ from users.forms import LoginForm, RegisterForm, VerifyForm, UserUpdateForm, Res
 from users.models import User, VerifyCode
 from users.services import generate_code, send_verification_mail, send_reset_password_mail
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.models import Group
 
 
 def reset_password(request):
@@ -43,6 +44,10 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+
+        group = Group.objects.get(name='user')
+        self.object.groups.add(group)
+        self.object.save()
 
         # Создаем ключ верификации пользователя и отправляем его на почту
         verify = VerifyCode.objects.create(verify_code=generate_code(), user=self.object)
