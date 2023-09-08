@@ -68,7 +68,7 @@ def index(request):
     else:
         context = get_index_context(request)
     blogs = list(Blog.objects.all())
-    context['blogs'] = sample(blogs, 3)
+    context['blogs'] = sample(blogs, 3) if blogs else None
 
     return render(request, 'mailing/index.html', context)
 

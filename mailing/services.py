@@ -27,7 +27,7 @@ def get_index_context(request):
 
     elif request.user.is_staff:
         logs = Logs.objects.all().order_by('-pk')
-        mailing_count = Mailing.objects.all().count()
+        mailing_count = Mailing.objects.count()
         mailing_active = Mailing.objects.filter(is_active=True).count()
         mailing_stopped = Mailing.objects.filter(state='stopped').count()
         mailing_launched = Mailing.objects.filter(is_active=True, state='launched').count()
